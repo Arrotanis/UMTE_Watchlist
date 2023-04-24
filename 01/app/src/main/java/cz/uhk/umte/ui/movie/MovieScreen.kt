@@ -1,6 +1,8 @@
 package cz.uhk.umte.ui.movie
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +27,7 @@ fun MovieScreen(
     var filter by remember { mutableStateOf("Watching") }
     Column {
         LazyColumn(
-            modifier = Modifier
+            modifier = Modifier.background(MaterialTheme.colors.secondaryVariant)
                 .fillMaxWidth()
                 .weight(1F),
             verticalArrangement = Arrangement.spacedBy(8.dp),

@@ -21,15 +21,16 @@ class MovieDetailVM(
     fun updateMovie(text: String) {
         launch {
             val updatedMovie = movie.first();
-            updatedMovie.name=text;
-            updatedMovie.changeDate= Date()
-            movieDao.insertOrUpdate(movie=updatedMovie)
+            updatedMovie.name = text;
+            updatedMovie.changeDate = Date()
+            movieDao.insertOrUpdate(movie = updatedMovie)
         }
     }
+
     fun updateMovie(movie: MovieEntity) {
         launch {
-            movie.changeDate=Date()
-            movieDao.insertOrUpdate(movie=movie)
+            movie.changeDate = Date()
+            movieDao.insertOrUpdate(movie = movie)
         }
     }
 }

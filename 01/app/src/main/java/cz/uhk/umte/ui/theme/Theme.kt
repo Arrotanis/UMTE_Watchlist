@@ -10,20 +10,22 @@ private val DarkColorPalette = darkColors(
     primary = DarkRed,
     primaryVariant = LightRed,
     secondary = Gold,
-    secondaryVariant = Yellow,
+    secondaryVariant = DarkGray,
     background = DarkGray,
-    error = SoftBlue
+    error = SoftBlue,
+    surface = DarkGray,
+    onSecondary = White,
 )
 
 private val LightColorPalette = lightColors(
     primary = DarkRed,
     primaryVariant = LightRed,
     secondary = Gold,
-    secondaryVariant = Yellow,
+    secondaryVariant = Gray,
     background = Gray,
     error = SoftBlue,
-    onPrimary = Black
-
+    onPrimary = Black,
+    surface = Gray,
 
 
     /* Other default colors to override

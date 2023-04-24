@@ -7,7 +7,7 @@ import java.util.Date
 
 class MovieVM(
     private val movieDao: MovieDao,
-    ) : BaseViewModel() {
+) : BaseViewModel() {
     var movies = movieDao.selectAll(0)
     fun addMovie(text: String) {
         launch {
@@ -19,6 +19,7 @@ class MovieVM(
             )
         }
     }
+
     fun changeStatus(int: Int) {
         movies = movieDao.selectAll(int)
     }
