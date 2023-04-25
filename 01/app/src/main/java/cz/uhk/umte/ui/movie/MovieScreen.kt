@@ -23,8 +23,10 @@ fun MovieScreen(
     viewModel: MovieVM = getViewModel(),
     onNavigateDetail: (Long) -> Unit,
 ) {
-    val movies = viewModel.movies.collectAsState(emptyList())
-    var filter by remember { mutableStateOf("Watching") }
+    var movies = viewModel.movies.collectAsState(emptyList())
+   // var filter by remember { mutableStateOf("Watching") }
+   // var search by remember { mutableStateOf("") }
+   // var status by remember { mutableStateOf(0) }
     Column {
         LazyColumn(
             modifier = Modifier.background(MaterialTheme.colors.secondaryVariant)
@@ -70,24 +72,23 @@ fun MovieScreen(
                             modifier = Modifier.padding(8.dp).fillMaxWidth()
                         )
                     }
-
                 }
             }
         }
         var inputText by remember { mutableStateOf("") }
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.height(IntrinsicSize.Max).padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             var expanded by remember { mutableStateOf(false) }
             Button(
-                modifier = Modifier.width(100.dp),
+                modifier = Modifier.width(100.dp).fillMaxHeight(0.7F),
                 onClick = {
                     expanded = true;
                 }
             ) {
-                Text(text = filter)
+                Text(text = viewModel.filter)
             }
             DropdownMenu(
                 expanded = expanded,
@@ -97,22 +98,25 @@ fun MovieScreen(
             )
             {
                 DropdownMenuItem(onClick = {
-                    filter = "Watching"
-                    viewModel.changeStatus(0)
+                    viewModel.filter="Watching"
+                    viewModel.status = 0
+                    viewModel.refresh()
                     expanded = false
                 }) {
                     Text("Watching")
                 }
                 DropdownMenuItem(onClick = {
-                    filter = "On Hold"
-                    viewModel.changeStatus(1)
+                    viewModel.filter="On Hold"
+                    viewModel.status = 1
+                    viewModel.refresh()
                     expanded = false
                 }) {
                     Text("On Hold")
                 }
                 DropdownMenuItem(onClick = {
-                    filter = "Finished"
-                    viewModel.changeStatus(2)
+                    viewModel.filter="Finished"
+                    viewModel.status = 2
+                    viewModel.refresh()
                     expanded = false
                 }) {
                     Text("Finished")
@@ -120,14 +124,18 @@ fun MovieScreen(
             }
             OutlinedTextField(
                 value = inputText,
-                onValueChange = { inputText = it },
+                onValueChange = {
+                    inputText = it
+                    viewModel.search = inputText
+                    viewModel.refresh()
+                },
                 label = {
-                    Text(text = "Movie")
+                    Text(text = "Search")
                 },
                 modifier = Modifier.weight(1f, true),
             )
             Button(
-                modifier = Modifier.height(IntrinsicSize.Max),
+                modifier = Modifier.fillMaxHeight(0.7F),
                 enabled = inputText.isBlank().not(),
                 onClick = {
                     viewModel.addMovie(inputText)

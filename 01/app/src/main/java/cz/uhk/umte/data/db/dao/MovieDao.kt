@@ -6,11 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
-    @Query("Select * From MovieEntity Order By favorite DESC, changeDate DESC")
-    fun selectAll(): Flow<List<MovieEntity>>
-
-    @Query("Select * From MovieEntity WHERE status = :status Order By favorite DESC, changeDate DESC")
-    fun selectAll(status: Int): Flow<List<MovieEntity>>
+    @Query("Select * From MovieEntity WHERE status = :status AND name LIKE '%' || :search || '%' Order By favorite DESC, changeDate DESC")
+    fun selectAll(status: Int, search: String?): Flow<List<MovieEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdate(movie: MovieEntity)

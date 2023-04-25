@@ -8,7 +8,10 @@ import java.util.Date
 class MovieVM(
     private val movieDao: MovieDao,
 ) : BaseViewModel() {
-    var movies = movieDao.selectAll(0)
+    var filter = "Watching"
+    var status = 0
+    var search = ""
+    var movies = movieDao.selectAll(status,search)
     fun addMovie(text: String) {
         launch {
             movieDao.insertOrUpdate(
@@ -20,7 +23,7 @@ class MovieVM(
         }
     }
 
-    fun changeStatus(int: Int) {
-        movies = movieDao.selectAll(int)
+    fun refresh() {
+        movies = movieDao.selectAll(status,search)
     }
 }

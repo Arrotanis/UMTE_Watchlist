@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.first
 import java.util.*
 
 class MovieDetailVM(
-    private val movieId: Long,
+    movieId: Long,
     private val movieDao: MovieDao
 ) : BaseViewModel() {
     val movie = movieDao.selectById(movieId)
