@@ -13,6 +13,6 @@ data class MovieEntity(
     var status: Int = 0,
     var favorite: Boolean = false,
     var changeDate: Date,
-    var duration: Int = 0,
+    var duration: Int = 180,
     var timestamp: Int = 0,
 )

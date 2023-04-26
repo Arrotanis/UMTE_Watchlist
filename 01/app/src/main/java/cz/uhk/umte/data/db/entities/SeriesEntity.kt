@@ -13,8 +13,8 @@ data class SeriesEntity(
     var status: Int = 0,
     var favorite: Boolean = false,
     var changeDate: Date,
-    var duration: Int = 0,
+    var duration: Int = 90,
     var timestamp: Int = 0,
-    var episode: Int = 0,
-    var season: Int = 0,
+    var episode: Int = 1,
+    var season: Int = 1,
 )

@@ -1,6 +1,5 @@
-package cz.uhk.umte.ui.movie
+package cz.uhk.umte.ui.series
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,11 +18,11 @@ import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MovieScreen(
-    viewModel: MovieVM = getViewModel(),
+fun SeriesScreen(
+    viewModel: SeriesVM = getViewModel(),
     onNavigateDetail: (Long) -> Unit,
 ) {
-    var movies = viewModel.movies.collectAsState(emptyList())
+    var series = viewModel.series.collectAsState(emptyList())
     Column {
         LazyColumn(
             modifier = Modifier.background(MaterialTheme.colors.secondaryVariant)
@@ -33,13 +32,13 @@ fun MovieScreen(
             contentPadding = PaddingValues(8.dp),
         ) {
             items(
-                items = movies.value,
+                items = series.value,
                 key = { it.id }
-            ) { movie ->
+            ) { series ->
                 Card(
                     backgroundColor = MaterialTheme.colors.primary,
                     contentColor = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.clickable { onNavigateDetail(movie.id) }
+                    modifier = Modifier.clickable { onNavigateDetail(series.id) }
                         .animateItemPlacement(),
                 ) {
                     Column(
@@ -50,11 +49,11 @@ fun MovieScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = movie.name,
+                                text = series.name,
                                 style = MaterialTheme.typography.h4,
                             )
                             Column(horizontalAlignment = Alignment.End) {
-                                icon(movie.favorite)?.let {
+                                icon(series.favorite)?.let {
                                     Icon(
                                         imageVector = it,
                                         contentDescription = null,
@@ -62,12 +61,12 @@ fun MovieScreen(
                                     )
                                 }
                                 Text(
-                                    text = (movie.timestamp/60).toString() +"h "+ movie.timestamp.mod(60) + "m"
+                                    text = "S"+series.season.toString()+" E"+series.episode.toString(),
                                 )
                             }
                         }
                         LinearProgressIndicator(
-                            progress = (movie.timestamp / ((movie.duration + 0.0001))).toFloat(),
+                            progress = (series.timestamp / ((series.duration + 0.0001))).toFloat(),
                             color = MaterialTheme.colors.onPrimary,
                             modifier = Modifier.padding(8.dp).fillMaxWidth()
                         )
@@ -138,7 +137,7 @@ fun MovieScreen(
                 modifier = Modifier.fillMaxHeight(0.7F),
                 enabled = inputText.isBlank().not(),
                 onClick = {
-                    viewModel.addMovie(inputText)
+                    viewModel.addSeries(inputText)
                 },
             ) {
                 Text(text = "Add")

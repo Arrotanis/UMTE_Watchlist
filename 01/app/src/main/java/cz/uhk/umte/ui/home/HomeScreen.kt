@@ -41,7 +41,7 @@ fun HomeScreen(
         Button(
             modifier = Modifier.padding(16.dp).fillMaxWidth(0.9F),
             onClick = {
-
+                parentController.navigateSeriesScreen()
             }
         ) {
             Text(
@@ -52,7 +52,7 @@ fun HomeScreen(
         Button(
             modifier = Modifier.padding(16.dp).fillMaxWidth(0.8F),
             onClick = {
-
+                parentController.navigateBookScreen()
             }
         ) {
             Text(

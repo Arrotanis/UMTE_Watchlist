@@ -1,4 +1,4 @@
-package cz.uhk.umte.ui.movie
+package cz.uhk.umte.ui.book
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
@@ -11,64 +11,80 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun MovieDetailScreen(
-    movieId: Long?,
-    viewModel: MovieDetailVM = getViewModel() {
-        parametersOf(movieId)
+fun BookDetailScreen(
+    bookId: Long?,
+    viewModel: BookDetailVM = getViewModel() {
+        parametersOf(bookId)
     },
     onNavigateDetail: () -> Unit,
 ) {
-    val detail = viewModel.movie.collectAsState(null)
+    val detail = viewModel.book.collectAsState(null)
     val dialogShown = remember {
         mutableStateOf(false)
     }
-    val updatedMovie = detail.value
+    val updatedBook = detail.value
     Column(
         modifier = Modifier.padding(16.dp),
     ) {
-        detail.value?.let { movieEntity ->
+        detail.value?.let { bookEntity ->
             Row {
                 Text(text = "Id: ")
-                Text(text = movieEntity.id.toString())
+                Text(text = bookEntity.id.toString())
             }
             Row {
                 Text(text = "Updated: ")
-                Text(text = movieEntity.changeDate.toString())
+                Text(text = bookEntity.changeDate.toString())
             }
             Column {
-                var inputText by remember { mutableStateOf(movieEntity.name) }
+                var inputText by remember { mutableStateOf(bookEntity.name) }
                 OutlinedTextField(
                     value = inputText,
                     onValueChange = {
                         inputText = it
-                        viewModel.updateMovie(inputText)
+                        viewModel.updateBook(inputText)
                     },
                     label = {
-                        Text(text = "Movie Name")
+                        Text(text = "Book Name")
                     },
                 )
             }
             Column {
-                var inputText by remember { mutableStateOf(movieEntity.description) }
+                var inputText by remember { mutableStateOf(bookEntity.description) }
                 OutlinedTextField(
                     value = inputText,
                     onValueChange = {
                         inputText = it
-                        if (updatedMovie != null) {
-                            updatedMovie.description = inputText
-                            viewModel.updateMovie(updatedMovie)
+                        if (updatedBook != null) {
+                            updatedBook.description = inputText
+                            viewModel.updateBook(updatedBook)
                         }
                     },
                     label = {
-                        Text(text = "Movie Description")
+                        Text(text = "Book Description")
+                    },
+                )
+            }
+            Column {
+                var inputText by remember { mutableStateOf(bookEntity.author) }
+                OutlinedTextField(
+                    value = inputText,
+                    onValueChange = {
+                        inputText = it
+                        if (updatedBook != null) {
+                            updatedBook.author = inputText
+                            viewModel.updateBook(updatedBook)
+                        }
+                    },
+                    label = {
+                        Text(text = "Book Author")
                     },
                 )
             }
             var sliderValueDuration by remember {
-                mutableStateOf(movieEntity.duration)
+                mutableStateOf(bookEntity.pages)
             }
-            var sliderValueTimestamp by remember {
-                mutableStateOf(movieEntity.timestamp)
+            var sliderValueBookstamp by remember {
+                mutableStateOf(bookEntity.bookstamp)
             }
             Column {
                 Column {
@@ -76,55 +92,55 @@ fun MovieDetailScreen(
                         value = sliderValueDuration.toFloat(),
                         onValueChange = {
                             sliderValueDuration = it.toInt()
-                            if (sliderValueTimestamp > sliderValueDuration) {
-                                sliderValueTimestamp = sliderValueDuration
+                            if (sliderValueBookstamp > sliderValueDuration) {
+                                sliderValueBookstamp = sliderValueDuration
                             }
                         },
                         onValueChangeFinished = {
-                            if (updatedMovie != null) {
-                                updatedMovie.duration = sliderValueDuration
-                                updatedMovie.timestamp = sliderValueTimestamp
-                                viewModel.updateMovie(updatedMovie)
+                            if (updatedBook != null) {
+                                updatedBook.pages = sliderValueDuration
+                                updatedBook.bookstamp = sliderValueBookstamp
+                                viewModel.updateBook(updatedBook)
                             }
 
                         },
                         valueRange = 0f..300f
                     )
                 }
-                Column { Text(text = "Movie Duration: " + sliderValueDuration / 60 + "h " + sliderValueDuration.mod(60) + "m") }
+                Column { Text(text = "Page Count: " + sliderValueDuration) }
             }
             Column {
                 Column {
                     Slider(
-                        value = sliderValueTimestamp.toFloat(),
+                        value = sliderValueBookstamp.toFloat(),
                         onValueChange = {
-                            sliderValueTimestamp = it.toInt()
+                            sliderValueBookstamp = it.toInt()
                         },
                         onValueChangeFinished = {
-                            if (updatedMovie != null) {
-                                updatedMovie.timestamp = sliderValueTimestamp
-                                viewModel.updateMovie(updatedMovie)
+                            if (updatedBook != null) {
+                                updatedBook.bookstamp = sliderValueBookstamp
+                                viewModel.updateBook(updatedBook)
                             }
 
                         },
                         valueRange = 0f..sliderValueDuration.toFloat()
                     )
                 }
-                Column { Text(text = "Timestamp: " + sliderValueTimestamp / 60 + "h " + sliderValueTimestamp.mod(60) + "m") }
+                Column { Text(text = "Bookstamp: " + sliderValueBookstamp) }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "Favorite: ")
                 var checkboxValue by remember {
-                    mutableStateOf(movieEntity.favorite)
+                    mutableStateOf(bookEntity.favorite)
                 }
                 Column {
                     Checkbox(
                         checked = checkboxValue,
                         onCheckedChange = {
                             checkboxValue = it
-                            if (updatedMovie != null) {
-                                updatedMovie.favorite = checkboxValue
-                                viewModel.updateMovie(updatedMovie)
+                            if (updatedBook != null) {
+                                updatedBook.favorite = checkboxValue
+                                viewModel.updateBook(updatedBook)
                             }
                         }
                     )
@@ -132,15 +148,15 @@ fun MovieDetailScreen(
             }
 
             Row(Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically) {
-                var state by remember { mutableStateOf(movieEntity.status) }
-                Text(text = "Watching:")
+                var state by remember { mutableStateOf(bookEntity.status) }
+                Text(text = "Reading:")
                 RadioButton(
                     selected = state == 0,
                     onClick = {
                         state = 0
-                        if (updatedMovie != null) {
-                            updatedMovie.status = state
-                            viewModel.updateMovie(updatedMovie)
+                        if (updatedBook != null) {
+                            updatedBook.status = state
+                            viewModel.updateBook(updatedBook)
                         }
                     }
                 )
@@ -149,9 +165,9 @@ fun MovieDetailScreen(
                     selected = state == 1,
                     onClick = {
                         state = 1
-                        if (updatedMovie != null) {
-                            updatedMovie.status = state
-                            viewModel.updateMovie(updatedMovie)
+                        if (updatedBook != null) {
+                            updatedBook.status = state
+                            viewModel.updateBook(updatedBook)
                         }
                     }
                 )
@@ -160,9 +176,9 @@ fun MovieDetailScreen(
                     selected = state == 2,
                     onClick = {
                         state = 2
-                        if (updatedMovie != null) {
-                            updatedMovie.status = state
-                            viewModel.updateMovie(updatedMovie)
+                        if (updatedBook != null) {
+                            updatedBook.status = state
+                            viewModel.updateBook(updatedBook)
                         }
                     }
                 )
@@ -177,7 +193,7 @@ fun MovieDetailScreen(
                     onDismissRequest = { dialogShown.switch() },
                     buttons = {
                         TextButton(onClick = {
-                            viewModel.deleteMovie()
+                            viewModel.deleteBook()
                             onNavigateDetail()
                         }) {
                             Text("Delete")
